@@ -52,7 +52,6 @@
                                         <fontDescription key="fontDescription" name="YSDisplay-Bold" family="YS Display" pointSize="23"/>
                                         <color key="textColor" name="YP White"/>
                                         <nil key="highlightedColor"/>
-                                        <lineBreakStrategy key="lineBreakStrategy"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Lda-EN-vAz">
                                         <rect key="frame" x="0.0" y="689" width="353" height="60"/>
