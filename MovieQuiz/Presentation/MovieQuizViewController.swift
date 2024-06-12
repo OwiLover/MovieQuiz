@@ -2,6 +2,10 @@ import UIKit
 
 final class MovieQuizViewController: UIViewController {
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     private var currentQuestionIndex = 0
     
     private var correctAnswers = 0
@@ -133,9 +137,14 @@ final class MovieQuizViewController: UIViewController {
         movieImageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         correctAnswers += isCorrect ? 1 : 0
         
+        noButton.isEnabled = false
+        yesButton.isEnabled = false
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.showNextQuestionOrResults()
             self.movieImageView.layer.borderWidth = 0
+            self.noButton.isEnabled = true
+            self.yesButton.isEnabled = true
         }
     }
     
