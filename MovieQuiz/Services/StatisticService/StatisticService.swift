@@ -86,7 +86,7 @@ final class StatisticService: StatisticServiceProtocol {
         Ваш результат: \(game.correct)/\(game.total)
         Количество сыгранных квизов: \(gamesCount)
         Рекорд: \(bestGame.correct)/\(bestGame.total) (\(bestGame.date.dateTimeString))
-        Средняя точность: \(Decimal(totalAccuracy))%
+        Средняя точность: \(String(format: "%.2f",totalAccuracy))%
         """
         
     }
