@@ -62,8 +62,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         noButton.tintColor = .clear
         yesButton.tintColor = .clear
-        
-        questionFactory.requestNextQuestion()
     }
     
     // MARK: - QuestionFactoryDelegate
