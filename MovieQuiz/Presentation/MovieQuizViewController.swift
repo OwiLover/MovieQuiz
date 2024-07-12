@@ -118,13 +118,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         let alert: AlertModel = AlertModel(title: title, message: message, buttonText: buttonText) {
             [weak self] in
-                guard let self = self else {
-                    return
-                }
-                self.currentQuestionIndex = 0
-                self.correctAnswers = 0
-                self.questionFactory?.requestNextQuestion()
-            }
+                guard let self = self else { return }
+            self.currentQuestionIndex = 0
+            self.correctAnswers = 0
+            self.questionFactory?.loadData()
+            self.questionFactory?.requestNextQuestion()
+        }
         
         alertPresenter.setup(delegate: self)
         self.alertPresenter = alertPresenter
