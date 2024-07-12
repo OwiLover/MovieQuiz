@@ -103,17 +103,23 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="yxF-YQ-AuD">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
+                            <constraint firstItem="yxF-YQ-AuD" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="BxJ-U8-yL6"/>
                             <constraint firstItem="JSs-l9-5qX" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" constant="-20" id="GtF-rY-7xu"/>
                             <constraint firstItem="JSs-l9-5qX" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="Yo0-pt-fc5"/>
                             <constraint firstItem="JSs-l9-5qX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="fPa-4F-HEC"/>
+                            <constraint firstItem="yxF-YQ-AuD" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="geu-oN-sPN"/>
                             <constraint firstItem="JSs-l9-5qX" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="zTN-qw-m8h"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="yxF-YQ-AuD" id="0f5-ma-xrx"/>
                         <outlet property="movieImageView" destination="Eay-re-dFD" id="sSP-pe-0ve"/>
                         <outlet property="noButton" destination="d73-Vc-hZZ" id="LvP-NF-vYz"/>
                         <outlet property="questionHeaderLabel" destination="WKr-8A-M2u" id="KDR-5h-RDq"/>

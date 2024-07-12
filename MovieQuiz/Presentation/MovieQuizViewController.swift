@@ -32,15 +32,22 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     @IBOutlet private weak var yesButton: UIButton!
     
+    @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.showLoadingIndicator()
+        
+        let moviesLoader = MoviesLoader()
+        
         let questionFactory = QuestionFactory()
         
-        questionFactory.setup(delegate: self)
+        questionFactory.setup(moviesLoader: moviesLoader, delegate: self)
         
         self.questionFactory = questionFactory
+        
+        self.questionFactory?.loadData()
         
         self.statisticService = StatisticService()
         
@@ -72,6 +79,16 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
     }
     
+    func didLoadDataFromServer() {
+        hideLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadDataFromServer(error: any Error) {
+        showNetworkError(message: error.localizedDescription)
+    }
+    
+    
     // MARK: - AlertPresenterDelegate
 //     Реализация функции протокола делегата не удалена для лучшего понимания заданного вопроса,
 //     который подробно расписан в AlertPresenterDelegate.swift
@@ -82,8 +99,41 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 //    }
 //    
     
+    private func showLoadingIndicator() {
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+    }
+    private func hideLoadingIndicator() {
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
+    }
+    
+    private func showNetworkError(message: String) {
+        hideLoadingIndicator()
+        
+        let alertPresenter = AlertPresenter()
+        
+        let title: String = "Что-то пошло не так("
+        let buttonText: String = "Попробовать еще раз"
+        
+        let alert: AlertModel = AlertModel(title: title, message: message, buttonText: buttonText) {
+            [weak self] in
+                guard let self = self else {
+                    return
+                }
+                self.currentQuestionIndex = 0
+                self.correctAnswers = 0
+                self.questionFactory?.requestNextQuestion()
+            }
+        
+        alertPresenter.setup(delegate: self)
+        self.alertPresenter = alertPresenter
+        
+        alertPresenter.presentAlert(alert: alert)
+    }
+    
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        let quizStepViewModel = QuizStepViewModel(image: UIImage(named: model.image) ?? UIImage(), question: model.text, questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
+        let quizStepViewModel = QuizStepViewModel(image: UIImage(data: model.image) ?? UIImage(), question: model.text, questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
         return quizStepViewModel
     }
     
