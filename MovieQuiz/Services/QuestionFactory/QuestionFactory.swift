@@ -91,7 +91,11 @@ final class QuestionFactory: QuestionFactoryProtocol {
                 imageData = try Data(contentsOf: movie.imageURL)
             }
             catch {
-                print("Failed to load image")
+                DispatchQueue.main.async {
+                    [weak self] in
+                    guard let self = self else { return }
+                    self.delegate?.didFailToLoadDataFromServer(error: error)
+                }
             }
             let rating = movie.rating
             

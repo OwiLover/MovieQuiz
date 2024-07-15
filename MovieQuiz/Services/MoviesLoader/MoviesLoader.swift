@@ -10,7 +10,7 @@ import Foundation
 struct MoviesLoader: MoviesLoadingProtocol {
     private let networkClient = NetworkClient()
     var mostPopularMoviesURL: URL {
-        guard let url = URL(string: "https://tv-api.com/en/API/MostPopularTVs/k_zcuw1ytf") else {
+        guard let url = URL(string: "https://tv-api.com/en/API/Top250Movies/k_zcuw1ytf") else {
             preconditionFailure("Unable to construct mostPopularMoviesUrl")
             }
         return url
@@ -23,10 +23,8 @@ struct MoviesLoader: MoviesLoadingProtocol {
                 do {
                     let mostPopularMovies = try JSONDecoder().decode(MostPopularMovies.self, from: data)
                     handler(.success(mostPopularMovies))
-//                    print("Model loaded successfully!")
                 }
                 catch {
-//                    print("Couldn't load Model!")
                     handler(.failure(error))
                 }
                 case .failure(let error):

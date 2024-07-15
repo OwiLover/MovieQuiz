@@ -73,12 +73,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let viewModel = convert(model: question)
         
         DispatchQueue.main.async { [weak self] in
+            self?.hideLoadingIndicator()
             self?.show(quiz: viewModel)
         }
     }
     
     func didLoadDataFromServer() {
-        hideLoadingIndicator()
         questionFactory?.requestNextQuestion()
     }
     
@@ -86,16 +86,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         showNetworkError(message: error.localizedDescription)
     }
     
-    
     // MARK: - AlertPresenterDelegate
-//     Реализация функции протокола делегата не удалена для лучшего понимания заданного вопроса,
-//     который подробно расписан в AlertPresenterDelegate.swift
-//
-//    func didReceiveAlert(alert: UIAlertController?) {
-//        guard let alert = alert else { return }
-//        present(alert, animated: true, completion: nil)
-//    }
-//    
     
     private func showLoadingIndicator() {
         activityIndicator.isHidden = false
@@ -128,6 +119,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         alertPresenter.presentAlert(alert: alert)
     }
     
+    private func requestQuestion() {
+        showLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
+    
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         let quizStepViewModel = QuizStepViewModel(image: UIImage(data: model.image) ?? UIImage(), question: model.text, questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
         return quizStepViewModel
@@ -140,7 +136,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func show(quiz result: QuizResultsViewModel) {
-        
+                
         let alertPresenter = AlertPresenter()
         
         let alert: AlertModel = AlertModel(title: result.title, message: result.text, buttonText: result.buttonText) { [weak self] in
@@ -149,7 +145,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             }
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
-            self.questionFactory?.requestNextQuestion()
+            self.requestQuestion()
         }
         
         alertPresenter.setup(delegate: self)
@@ -194,7 +190,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             show(quiz: results)
         } else {
             currentQuestionIndex += 1
-            questionFactory?.requestNextQuestion()
+            requestQuestion()
         }
     }
     
