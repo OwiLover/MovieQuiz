@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -8,7 +8,7 @@ final class MovieQuizViewController: UIViewController {
     
     private var alertPresenter: AlertPresenterProtocol?
     
-    private let presenter = MovieQuizPresenter(statisticService: StatisticService())
+    private var presenter: MovieQuizPresenter?
         
     @IBOutlet private weak var noButton: UIButton!
     
@@ -30,9 +30,9 @@ final class MovieQuizViewController: UIViewController {
         
         self.showLoadingIndicator()
         
-        presenter.viewController = self
+        presenter = MovieQuizPresenter(viewController: self, statisticService: StatisticService())
         
-        presenter.loadData()
+        presenter?.loadData()
         
         movieImageView.layer.masksToBounds = true
         movieImageView.layer.cornerRadius = 20
@@ -69,7 +69,7 @@ final class MovieQuizViewController: UIViewController {
         let alert: AlertModel = AlertModel(title: title, message: message, buttonText: buttonText) {
             [weak self] in
                 guard let self = self else { return }
-            presenter.resetGame()
+            presenter?.resetGame()
         }
         
         alertPresenter.setup(delegate: self)
@@ -85,14 +85,13 @@ final class MovieQuizViewController: UIViewController {
     }
     
     func show(quiz result: QuizResultsViewModel) {
-                
         let alertPresenter = AlertPresenter()
         
         let alert: AlertModel = AlertModel(title: result.title, message: result.text, buttonText: result.buttonText) { [weak self] in
             guard let self = self else {
                 return
             }
-            presenter.restartGame()
+            presenter?.restartGame()
         }
         
         alertPresenter.setup(delegate: self)
@@ -101,34 +100,26 @@ final class MovieQuizViewController: UIViewController {
         alertPresenter.presentAlert(alert: alert)
     }
     
-    func showAnswerResult(isCorrect: Bool) {
-        
+    func showImageBorder(isCorrectAnswer: Bool) {
         movieImageView.layer.borderWidth = 8
         
-        movieImageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
-        
-        presenter.checkCorrectAnswer(isCorrect: isCorrect)
+        movieImageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         
         noButton.isEnabled = false
         yesButton.isEnabled = false
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            
-            guard let self = self else {
-                return
-            }
-            presenter.showNextQuestionOrResults()
-            self.movieImageView.layer.borderWidth = 0
-            self.noButton.isEnabled = true
-            self.yesButton.isEnabled = true
-        }
+    }
+    
+    func hideImageBorder() {
+        movieImageView.layer.borderWidth = 0
+        noButton.isEnabled = true
+        yesButton.isEnabled = true
     }
     
     @IBAction private func noButtonTouchUpInside(_ sender: Any) {
-        presenter.noButtonTouchUpInside()
+        presenter?.noButtonTouchUpInside()
     }
     
     @IBAction private func yesButtonTouchUpInside(_ sender: Any) {
-        presenter.yesButtonTouchUpInside()
+        presenter?.yesButtonTouchUpInside()
     }
 }
