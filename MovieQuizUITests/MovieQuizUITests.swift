@@ -65,7 +65,7 @@ final class MovieQuizUITests: XCTestCase {
         
     }
     
-    func testNoButton() throws {
+    func testNoButtonPosterChange() throws {
         
         sleep(2)
         
