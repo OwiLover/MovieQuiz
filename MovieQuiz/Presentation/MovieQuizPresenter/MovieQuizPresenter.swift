@@ -5,7 +5,7 @@
 //  Created by Owi Lover on 7/24/24.
 //
 
-import UIKit
+import Foundation
 
 final class MovieQuizPresenter: QuestionFactoryDelegate {
     
@@ -81,7 +81,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
  
     func convert(model: QuizQuestion) -> QuizStepViewModel {
-        let quizStepViewModel = QuizStepViewModel(image: UIImage(data: model.image) ?? UIImage(), question: model.text, questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
+        let quizStepViewModel = QuizStepViewModel(imageData: model.image, question: model.text, questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
         return quizStepViewModel
     }
     
