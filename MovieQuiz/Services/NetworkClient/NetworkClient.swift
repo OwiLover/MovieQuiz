@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct NetworkClient {
+
+struct NetworkClient: NetworkRoutingProtocol {
 
     private enum NetworkError: Error {
         case codeError

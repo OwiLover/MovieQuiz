@@ -80,7 +80,7 @@ final class StatisticService: StatisticServiceProtocol {
             self.bestGame = game
         }
     }
-    
+    // Посчитал, что нет необходимости перемещать данную функцию в MovieQuizPresenter, поскольку данный метод не относится к View контроллеру и хорошо вписывается как метод сервиса, или это ошибка?
     func getStatistic(of game: GameResult) -> String {
         return """
         Ваш результат: \(game.correct)/\(game.total)
